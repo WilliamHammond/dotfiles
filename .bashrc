@@ -117,3 +117,23 @@ if ! shopt -oq posix; then
 fi
 
 alias ports='netstat -tulanp'
+function myip()
+{
+    extIp=$(dig +short myip.opendns.com @resolver1.opendns.com)
+
+    printf "Wireless IP: "
+    MY_IP=$(/sbin/ifconfig wlp4s0 | awk '/inet/ { print $2 } ' |
+      sed -e s/addr://)
+    echo ${MY_IP:-"Not connected"}
+
+
+    printf "Wired IP: "
+    MY_IP=$(/sbin/ifconfig enp0s25 | awk '/inet/ { print $2 } ' |
+      sed -e s/addr://)
+    echo ${MY_IP:-"Not connected"}
+
+    echo ""
+    echo "WAN IP: $extIp"
+
+}
+
